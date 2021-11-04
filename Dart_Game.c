@@ -114,7 +114,13 @@ void right_move()
     board[right_y][right_x] = '<';
 }
 
+bool right_blocked() {
+    return board[right_y-dy][right_x] == '*';
+}
 
+void right_turn() {
+    dy = -dy;
+}
 
 void display() {
     for (int i = 0; i < HEIGHT; i++) {

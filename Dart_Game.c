@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <Windows.h>
 #include <stdbool.h>
@@ -5,7 +6,7 @@
 #define WIDTH 60
 #define HEIGHT 30
 
-void line(int, int, int, int);
+void line_draw(int, int, int, int);
 char board[HEIGHT][WIDTH];
 
 void initialize(void);
@@ -13,6 +14,9 @@ void display(void);
 void below_move(void);
 bool below_blocked(void);
 void below_turn(void);
+void right_move(void);
+bool right_blocked(void);
+void right_turn();
 
 int p1_score = 0, p2_score = 0;
 int below_x, below_y, right_x, right_y;
@@ -22,18 +26,83 @@ int dx, dy;
 int main(void)
 {
     initialize();
-    line(29, 4, 28, 59);
-    while (1)
+    line_draw(29, 4, 28, 59);
+    display();
+
+    int x, y;
+
+    
+    for (int i = 0; i < 2; i++)
     {
-        while (below_blocked())
+        if (i==0) printf("\n[ Player A ]\n");
+        if (i==1) printf("\n[ Player B ]\n");
+
+        printf("x축 시간 = ");
+        scanf("%d", &x);
+        printf("y축 시간 = ");
+        scanf("%d", &y);
+
+
+        for (int i = 0; i < x; i++)
         {
-            below_turn();
+
+            while (below_blocked())
+            {
+                below_turn();
+            }
+            below_move();
+            display();
+            system("cls");
         }
-        below_move();
-        display();
-        Sleep(30);
-        system("cls");
+
+        for (int j = 0; j < y; j++)
+        {
+
+            while (right_blocked())
+            {
+                right_turn();
+            }
+            right_move();
+            display();
+            system("cls");
+        }
+        
+        if ((int)(x / 4.0) == 0)
+        {
+            p1_score += 1;
+        }
+        else if ((int)(x / 4.0) == 1)
+        {
+            p1_score += 2;
+        }
+        else if ((int)(x / 4.0) == 2)
+        {
+            p1_score += 3;
+        }
+        else if ((int)(x / 4.0) == 3)
+        {
+            p1_score += 5;
+        }
+        else if ((int)(x / 4.0) == 4)
+        {
+            p1_score += 7;
+        }
+        else if ((int)(x / 4.0) == 5)
+        {
+            p1_score += 9;
+        }
+        else if ((int)(x / 4.0) == 6)
+        {
+            p1_score += 10;
+        }
+
+
+        if (i == 0) printf("\nA 최종점수  = %d\n",p1_score);
+        if (i == 1) printf("\nB 최종점수  = ");
+
     }
+
+    
 }
 
 void initialize()
@@ -80,7 +149,7 @@ void initialize()
     dx = dy = 1;
 }
 
-void line(int b_y, int b_x, int r_y, int r_x)
+void line_draw(int b_y, int b_x, int r_y, int r_x)
 {
     below_y = b_y;  //29
     below_x = b_x;  //4
